@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from "react";
+import FileUploadForm from "./pages/FileUploadForm/FileUploadForm";
+import { configureI18n } from "./lib/i18n";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import "./App.css";
+import { Container } from "@mui/material";
+import Dashboard from "./pages/Dashboard";
+import Header from "./components/Header/Header";
+import useStyles from "./styles";
+import { NotificationProvider } from "./lib/context/NotificationContext";
+
+const theme = createTheme({});
 
 function App() {
+  configureI18n("/");
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback>
+      <ThemeProvider theme={theme}>
+        <NotificationProvider>
+          <div className="App">
+            <Header />
+            <Container maxWidth="lg" className={classes.container}>
+              <FileUploadForm />
+              <Dashboard />
+            </Container>
+          </div>
+        </NotificationProvider>
+      </ThemeProvider>
+    </Suspense>
   );
 }
 
